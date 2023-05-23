@@ -46,37 +46,30 @@ const KeyContainer = styled.div`
 `;
 
 const App: FC = () => {
-    const [message, setMessage] = useState('Waiting...');
-    const onClick = useCallback(() => {
-        setMessage('Things are happening!!!');
-    }, [setMessage]);
+    const [waveType, setWaveType] = useState('sine');
     const onInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        setMessage(e.currentTarget.value);
-    }, [setMessage]);
+        setWaveType(e.currentTarget.value);
+    }, [setWaveType()]);
     const onKeyPlay = useCallback((e: MouseEvent<HTMLButtonElement>) => {
         const value = parseInt(`${e.currentTarget.value}`, 10);
         const oscillator = audioCtx.createOscillator();
 
-        oscillator.type = "sine";
+        oscillator.type = waveType as any;
         oscillator.connect(audioCtx.destination);
         oscillator.start();
-        oscillator.frequency.setValueAtTime(value / 20, audioCtx.currentTime);
+        oscillator.frequency.setValueAtTime(value / 5, audioCtx.currentTime);
 
         setTimeout(() => {
             oscillator.stop();
             oscillator.disconnect();
         }, 500);
-    }, []);
+    }, [waveType]);
 
     return (
         <>
             <GlobalStyle/>
             <div>
-                <input type="text" value={message} onChange={onInput}/>
-                <br/>
-                <button onClick={onClick}>YEY!</button>
-                <br/>
-                <MessageBox>{message}</MessageBox>
+                <input type="text" value={waveType} onChange={onInput}/>
             </div>
             <KeyContainer>
                 <KeyButton
