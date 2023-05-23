@@ -20,6 +20,11 @@ const KeyButton = styled.div`
   width: 2em;
   height: 7em;
   margin: 0 0.05em;
+  cursor: pointer;
+
+  &:hover {
+    background-color: lightblue;
+  }
 `;
 const BlackKeyButton = styled(KeyButton)`
   background-color: black;
