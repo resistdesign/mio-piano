@@ -78,39 +78,51 @@ const App: FC = () => {
             </div>
             <KeyContainer>
                 <KeyButton
+                    onClick={onKeyPlay}
                     value={3000}
                 />
                 <BlackKeyButton
+                    onClick={onKeyPlay}
                     value={3100}
                 />
                 <KeyButton
+                    onClick={onKeyPlay}
                     value={3200}
                 />
                 <BlackKeyButton
+                    onClick={onKeyPlay}
                     value={3300}
                 />
                 <KeyButton
+                    onClick={onKeyPlay}
                     value={3400}
                 />
                 <KeyButton
+                    onClick={onKeyPlay}
                     value={3500}
                 />
                 <BlackKeyButton
+                    onClick={onKeyPlay}
                     value={3600}
                 />
                 <KeyButton
+                    onClick={onKeyPlay}
                     value={3700}
                 />
                 <BlackKeyButton
+                    onClick={onKeyPlay}
                     value={3800}
                 />
                 <KeyButton
+                    onClick={onKeyPlay}
                     value={3900}
                 />
                 <BlackKeyButton
+                    onClick={onKeyPlay}
                     value={4000}
                 />
                 <KeyButton
+                    onClick={onKeyPlay}
                     value={4100}
                 />
             </KeyContainer>
