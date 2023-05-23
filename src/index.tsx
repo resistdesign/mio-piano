@@ -62,8 +62,10 @@ const App: FC = () => {
         setMessage(e.currentTarget.value);
     }, [setMessage]);
     const onKeyPlay = useCallback((e: MouseEvent<HTMLButtonElement>) => {
-        oscillator.frequency.setValueAtTime(parseInt(`${e.currentTarget.value}`, 10), audioCtx.currentTime);
-        oscillator.frequency.setValueAtTime(0, audioCtx.currentTime + 1000);
+        const value = parseInt(`${e.currentTarget.value}`, 10);
+
+        oscillator.frequency.setValueAtTime(value, audioCtx.currentTime);
+        oscillator.frequency.setValueAtTime(0, audioCtx.currentTime + 1);
     }, []);
 
     return (
