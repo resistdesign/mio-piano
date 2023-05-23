@@ -28,6 +28,8 @@ const App: FC = () => {
                 <input type="text" value={message} onChange={onInput}/>
                 <br/>
                 <button onClick={onClick}>YEY!</button>
+                <br/>
+                <span>{message}</span>
             </div>
         </>
     );
