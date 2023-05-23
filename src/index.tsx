@@ -49,7 +49,7 @@ const App: FC = () => {
     const [waveType, setWaveType] = useState('sine');
     const onInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setWaveType(e.currentTarget.value);
-    }, [setWaveType()]);
+    }, [setWaveType]);
     const onKeyPlay = useCallback((e: MouseEvent<HTMLButtonElement>) => {
         const value = parseInt(`${e.currentTarget.value}`, 10);
         const oscillator = audioCtx.createOscillator();
