@@ -8,8 +8,8 @@ const audioCtx = new AudioContext();
 // create Oscillator node
 const oscillator = audioCtx.createOscillator();
 
-oscillator.type = "square";
-oscillator.frequency.setValueAtTime(0, audioCtx.currentTime); // value in hertz
+oscillator.type = "sine";
+oscillator.frequency.setValueAtTime(0, audioCtx.currentTime);
 oscillator.connect(audioCtx.destination);
 oscillator.start();
 
@@ -64,8 +64,8 @@ const App: FC = () => {
     const onKeyPlay = useCallback((e: MouseEvent<HTMLButtonElement>) => {
         const value = parseInt(`${e.currentTarget.value}`, 10);
 
-        oscillator.frequency.setValueAtTime(value, audioCtx.currentTime);
-        oscillator.frequency.setValueAtTime(0, audioCtx.currentTime + 1);
+        oscillator.frequency.setValueAtTime(value / 8, audioCtx.currentTime);
+        oscillator.frequency.setValueAtTime(0, audioCtx.currentTime + 0.25);
     }, []);
 
     return (
