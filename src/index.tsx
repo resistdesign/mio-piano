@@ -1,6 +1,17 @@
-import React, {FC, useCallback, useState} from 'react';
-import ReactDOM from 'react-dom';
+import {render} from 'react-dom';
+import React, {ChangeEvent, FC, MouseEvent, useCallback, useState} from 'react';
 import styled, {createGlobalStyle} from "styled-components";
+
+// create web audio api context
+const audioCtx = new AudioContext();
+
+// create Oscillator node
+const oscillator = audioCtx.createOscillator();
+
+oscillator.type = "square";
+oscillator.frequency.setValueAtTime(0, audioCtx.currentTime); // value in hertz
+oscillator.connect(audioCtx.destination);
+oscillator.start();
 
 const root = document.getElementById('react-root');
 
@@ -15,7 +26,7 @@ const MessageBox = styled.div`
   background-color: #eee;
   font-size: 5em;
 `;
-const KeyButton = styled.div`
+const KeyButton = styled.button`
   background-color: white;
   width: 2em;
   height: 7em;
@@ -46,10 +57,14 @@ const App: FC = () => {
     const [message, setMessage] = useState('Waiting...');
     const onClick = useCallback(() => {
         setMessage('Things are happening!!!');
-    }, setMessage);
-    const onInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    }, [setMessage]);
+    const onInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setMessage(e.currentTarget.value);
     }, [setMessage]);
+    const onKeyPlay = useCallback((e: MouseEvent<HTMLButtonElement>) => {
+        oscillator.frequency.setValueAtTime(parseInt(`${e.currentTarget.value}`, 10), audioCtx.currentTime);
+        oscillator.frequency.setValueAtTime(0, audioCtx.currentTime + 1000);
+    }, []);
 
     return (
         <>
@@ -62,24 +77,48 @@ const App: FC = () => {
                 <MessageBox>{message}</MessageBox>
             </div>
             <KeyContainer>
-                <KeyButton/>
-                <BlackKeyButton/>
-                <KeyButton/>
-                <BlackKeyButton/>
-                <KeyButton/>
-                <KeyButton/>
-                <BlackKeyButton/>
-                <KeyButton/>
-                <BlackKeyButton/>
-                <KeyButton/>
-                <BlackKeyButton/>
-                <KeyButton/>
+                <KeyButton
+                    value={3000}
+                />
+                <BlackKeyButton
+                    value={3100}
+                />
+                <KeyButton
+                    value={3200}
+                />
+                <BlackKeyButton
+                    value={3300}
+                />
+                <KeyButton
+                    value={3400}
+                />
+                <KeyButton
+                    value={3500}
+                />
+                <BlackKeyButton
+                    value={3600}
+                />
+                <KeyButton
+                    value={3700}
+                />
+                <BlackKeyButton
+                    value={3800}
+                />
+                <KeyButton
+                    value={3900}
+                />
+                <BlackKeyButton
+                    value={4000}
+                />
+                <KeyButton
+                    value={4100}
+                />
             </KeyContainer>
         </>
     );
 };
 
-ReactDOM.render(
+render(
     <App/>,
     root
 );
