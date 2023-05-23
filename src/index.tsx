@@ -17,12 +17,15 @@ const App: FC = () => {
     const onClick = useCallback(() => {
         setMessage('Things are happening!!!');
     }, setMessage);
+    const onInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setMessage(e.currentTarget.value);
+    }, [setMessage]);
 
     return (
         <>
             <GlobalStyle/>
             <div>
-                {message}
+                <input type="text" value={message} onChange={onInput}/>
                 <br/>
                 <button onClick={onClick}>YEY!</button>
             </div>
