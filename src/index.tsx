@@ -60,8 +60,12 @@ const App: FC = () => {
         oscillator.type = "sine";
         oscillator.connect(audioCtx.destination);
         oscillator.start();
-        oscillator.frequency.setValueAtTime(value / 5, audioCtx.currentTime);
-        oscillator.frequency.setValueAtTime(0, audioCtx.currentTime + 0.25);
+        oscillator.frequency.setValueAtTime(value / 8, audioCtx.currentTime);
+
+        setTimeout(() => {
+            oscillator.stop();
+            oscillator.disconnect();
+        }, 500);
     }, []);
 
     return (
