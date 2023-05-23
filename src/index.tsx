@@ -21,9 +21,9 @@ const App: FC = () => {
     return (
         <>
             <GlobalStyle/>
-            <br/>
             <div>
                 {message}
+                <br/>
                 <button onClick={onClick}>YEY!</button>
             </div>
         </>
