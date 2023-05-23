@@ -5,14 +5,6 @@ import styled, {createGlobalStyle} from "styled-components";
 // create web audio api context
 const audioCtx = new AudioContext();
 
-// create Oscillator node
-const oscillator = audioCtx.createOscillator();
-
-oscillator.type = "sine";
-oscillator.frequency.setValueAtTime(0, audioCtx.currentTime);
-oscillator.connect(audioCtx.destination);
-oscillator.start();
-
 const root = document.getElementById('react-root');
 
 const GlobalStyle = createGlobalStyle`
@@ -63,8 +55,12 @@ const App: FC = () => {
     }, [setMessage]);
     const onKeyPlay = useCallback((e: MouseEvent<HTMLButtonElement>) => {
         const value = parseInt(`${e.currentTarget.value}`, 10);
+        const oscillator = audioCtx.createOscillator();
 
-        oscillator.frequency.setValueAtTime(value / 8, audioCtx.currentTime);
+        oscillator.type = "sine";
+        oscillator.connect(audioCtx.destination);
+        oscillator.start();
+        oscillator.frequency.setValueAtTime(value / 5, audioCtx.currentTime);
         oscillator.frequency.setValueAtTime(0, audioCtx.currentTime + 0.25);
     }, []);
 
