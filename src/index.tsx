@@ -1,6 +1,6 @@
 import React, {FC, useCallback, useState} from 'react';
 import ReactDOM from 'react-dom';
-import {createGlobalStyle} from "styled-components";
+import styled, {createGlobalStyle} from "styled-components";
 
 const root = document.getElementById('react-root');
 
@@ -10,6 +10,31 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     font-family: sans-serif;
   }
+`;
+const MessageBox = styled.div`
+  background-color: #eee;
+  font-size: 5em;
+`;
+const KeyButton = styled.div`
+  background-color: white;
+  width: 2em;
+  height: 7em;
+  margin: 0 0.05em;
+`;
+const BlackKeyButton = styled(KeyButton)`
+  background-color: black;
+  width: 1.5em;
+  height: 5em;
+  margin: 0 -0.75em;
+  z-index: 1;
+`;
+const KeyContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 1em;
+  background-color: #ddd;
 `;
 
 const App: FC = () => {
@@ -29,8 +54,22 @@ const App: FC = () => {
                 <br/>
                 <button onClick={onClick}>YEY!</button>
                 <br/>
-                <span>{message}</span>
+                <MessageBox>{message}</MessageBox>
             </div>
+            <KeyContainer>
+                <KeyButton/>
+                <BlackKeyButton/>
+                <KeyButton/>
+                <BlackKeyButton/>
+                <KeyButton/>
+                <KeyButton/>
+                <BlackKeyButton/>
+                <KeyButton/>
+                <BlackKeyButton/>
+                <KeyButton/>
+                <BlackKeyButton/>
+                <KeyButton/>
+            </KeyContainer>
         </>
     );
 };
