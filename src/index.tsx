@@ -35,6 +35,7 @@ const BlackKeyButton = styled(KeyButton)`
   height: 5em;
   margin: 0 -0.75em;
   z-index: 1;
+  color: white;
 `;
 const KeyContainer = styled.div`
   display: flex;
@@ -75,51 +76,51 @@ const App: FC = () => {
                 <KeyButton
                     onClick={onKeyPlay}
                     value={3000}
-                />
+                >C</KeyButton>
                 <BlackKeyButton
                     onClick={onKeyPlay}
                     value={3100}
-                />
+                >C#</BlackKeyButton>
                 <KeyButton
                     onClick={onKeyPlay}
                     value={3200}
-                />
+                >D</KeyButton>
                 <BlackKeyButton
                     onClick={onKeyPlay}
                     value={3300}
-                />
+                >D#</BlackKeyButton>
                 <KeyButton
                     onClick={onKeyPlay}
                     value={3400}
-                />
+                >E</KeyButton>
                 <KeyButton
                     onClick={onKeyPlay}
                     value={3500}
-                />
+                >F</KeyButton>
                 <BlackKeyButton
                     onClick={onKeyPlay}
                     value={3600}
-                />
+                >F#</BlackKeyButton>
                 <KeyButton
                     onClick={onKeyPlay}
                     value={3700}
-                />
+                >A</KeyButton>
                 <BlackKeyButton
                     onClick={onKeyPlay}
                     value={3800}
-                />
+                >A#</BlackKeyButton>
                 <KeyButton
                     onClick={onKeyPlay}
                     value={3900}
-                />
+                >B</KeyButton>
                 <BlackKeyButton
                     onClick={onKeyPlay}
                     value={4000}
-                />
+                >B#</BlackKeyButton>
                 <KeyButton
                     onClick={onKeyPlay}
                     value={4100}
-                />
+                >C</KeyButton>
             </KeyContainer>
         </>
     );
