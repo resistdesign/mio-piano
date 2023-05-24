@@ -63,6 +63,12 @@ const OscUIContainer = styled.div`
 const OscTypeButton = styled.div`
   padding: 0.5em;
   background-color: white;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    background-color: lightblue;
+  }
 `;
 const App: FC = () => {
     const [selectedOscType, setSelectedOscType] = useState<OscillatorType>(oscTypes[0]);
@@ -77,7 +83,6 @@ const App: FC = () => {
     const rangeStart = -39;
     const rangeEnd = 48;
     const rangeList = Array.from({length: rangeEnd - rangeStart + 1}, (_, i) => i + rangeStart);
-    const [waveType, setWaveType] = useState<OscillatorType>('sine');
     const [mouseIsDown, setMouseIsDown] = useState(false);
     const keyPressedMapRef = useRef<Record<number, boolean>>({});
     const keyPressedMap = keyPressedMapRef.current;
@@ -120,7 +125,7 @@ const App: FC = () => {
                 }
             };
 
-            oscillator.type = waveType;
+            oscillator.type = selectedOscType;
             vol.connect(audioCtx.destination);
             oscillator.connect(vol);
             oscillator.frequency.value = value;
@@ -138,7 +143,7 @@ const App: FC = () => {
                 kE.currentTarget?.addEventListener('keyup', onEnd as any);
             }
         }
-    }, [waveType, mouseIsDown, keyPressedMap, setKeyPressed]);
+    }, [selectedOscType, mouseIsDown, keyPressedMap, setKeyPressed]);
 
     return (
         <>
