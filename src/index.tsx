@@ -2,6 +2,8 @@ import {render} from 'react-dom';
 import React, {ChangeEvent, FC, MouseEvent, useCallback, useState} from 'react';
 import styled, {createGlobalStyle} from "styled-components";
 
+const getHalfStepFrequency = (n = 0) => 440 * Math.pow(Math.pow(2, 1 / 12), n);
+
 // create web audio api context
 const audioCtx = new AudioContext();
 
@@ -24,6 +26,9 @@ const KeyButton = styled.button`
   height: 7em;
   margin: 0 0.05em;
   cursor: pointer;
+  appearance: none;
+  display: block;
+  font-size: 1em;
 
   &:hover {
     background-color: lightblue;
@@ -45,9 +50,13 @@ const KeyContainer = styled.div`
   padding: 1em;
   background-color: #ddd;
   user-select: none;
+  font-size: 3em;
 `;
 
 const App: FC = () => {
+    const rangeStart = -4;
+    const rangeEnd = 4;
+    const rangeList = Array.from({length: rangeEnd - rangeStart + 1}, (_, i) => i + rangeStart);
     const [waveType, setWaveType] = useState('triangle');
     const [mouseIsDown, setMouseIsDown] = useState(false);
     const onInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +65,7 @@ const App: FC = () => {
     const onKeyContainerDown = useCallback((e: MouseEvent<HTMLDivElement>) => setMouseIsDown(true), [setMouseIsDown]);
     const onKeyContainerUp = useCallback((e: MouseEvent<HTMLDivElement>) => setMouseIsDown(false), [setMouseIsDown]);
     const onKeyPlayDown = useCallback((e: MouseEvent<HTMLButtonElement>) => {
-        if (mouseIsDown) {
+        if (e.type === 'mousedown' || mouseIsDown) {
             const value = parseFloat(`${e.currentTarget.value}`);
             const oscillator = audioCtx.createOscillator();
             const onEnd = () => {
@@ -85,71 +94,18 @@ const App: FC = () => {
                 onMouseUp={onKeyContainerUp}
                 onMouseLeave={onKeyContainerUp}
             >
-                <KeyButton
-                    onMouseDown={onKeyPlayDown}
-                    onMouseOver={onKeyPlayDown}
-                    value={261.63}
-                >C</KeyButton>
-                <BlackKeyButton
-                    onMouseDown={onKeyPlayDown}
-                    onMouseOver={onKeyPlayDown}
-                    value={277.18}
-                >C#</BlackKeyButton>
-                <KeyButton
-                    onMouseDown={onKeyPlayDown}
-                    onMouseOver={onKeyPlayDown}
-                    value={293.66}
-                >D</KeyButton>
-                <BlackKeyButton
-                    onMouseDown={onKeyPlayDown}
-                    onMouseOver={onKeyPlayDown}
-                    value={311.13}
-                >D#</BlackKeyButton>
-                <KeyButton
-                    onMouseDown={onKeyPlayDown}
-                    onMouseOver={onKeyPlayDown}
-                    value={329.63}
-                >E</KeyButton>
-                <KeyButton
-                    onMouseDown={onKeyPlayDown}
-                    onMouseOver={onKeyPlayDown}
-                    value={349.23}
-                >F</KeyButton>
-                <BlackKeyButton
-                    onMouseDown={onKeyPlayDown}
-                    onMouseOver={onKeyPlayDown}
-                    value={369.99}
-                >F#</BlackKeyButton>
-                <KeyButton
-                    onMouseDown={onKeyPlayDown}
-                    onMouseOver={onKeyPlayDown}
-                    value={392.00}
-                >G</KeyButton>
-                <BlackKeyButton
-                    onMouseDown={onKeyPlayDown}
-                    onMouseOver={onKeyPlayDown}
-                    value={392.00}
-                >G#</BlackKeyButton>
-                <KeyButton
-                    onMouseDown={onKeyPlayDown}
-                    onMouseOver={onKeyPlayDown}
-                    value={440.00}
-                >A</KeyButton>
-                <BlackKeyButton
-                    onMouseDown={onKeyPlayDown}
-                    onMouseOver={onKeyPlayDown}
-                    value={466.16}
-                >A#</BlackKeyButton>
-                <KeyButton
-                    onMouseDown={onKeyPlayDown}
-                    onMouseOver={onKeyPlayDown}
-                    value={493.88}
-                >B</KeyButton>
-                <KeyButton
-                    onMouseDown={onKeyPlayDown}
-                    onMouseOver={onKeyPlayDown}
-                    value={523.25}
-                >C</KeyButton>
+                {rangeList.map((n) => {
+                    return (
+                        <KeyButton
+                            key={n}
+                            value={getHalfStepFrequency(n)}
+                            onMouseDown={onKeyPlayDown}
+                            onMouseOver={onKeyPlayDown}
+                        >
+                            {n}
+                        </KeyButton>
+                    );
+                })}
             </KeyContainer>
         </>
     );
