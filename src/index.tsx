@@ -50,12 +50,12 @@ const KeyContainer = styled.div`
   padding: 1em;
   background-color: #ddd;
   user-select: none;
-  font-size: 3em;
+  font-size: 2em;
 `;
 
 const App: FC = () => {
-    const rangeStart = -4;
-    const rangeEnd = 4;
+    const rangeStart = -20;
+    const rangeEnd = 20;
     const rangeList = Array.from({length: rangeEnd - rangeStart + 1}, (_, i) => i + rangeStart);
     const [waveType, setWaveType] = useState('triangle');
     const [mouseIsDown, setMouseIsDown] = useState(false);
@@ -95,15 +95,21 @@ const App: FC = () => {
                 onMouseLeave={onKeyContainerUp}
             >
                 {rangeList.map((n) => {
+                    const f = getHalfStepFrequency(n);
+                    const offSetIndex = n < 0 ? 12 - Math.abs(n % 12) : Math.abs(n % 12);
+                    const blkIndices = [1, 3, 6, 8, 10];
+                    const isBlack = blkIndices.includes(offSetIndex);
+                    const Comp = isBlack ? BlackKeyButton : KeyButton;
+
                     return (
-                        <KeyButton
+                        <Comp
                             key={n}
-                            value={getHalfStepFrequency(n)}
+                            value={f}
                             onMouseDown={onKeyPlayDown}
                             onMouseOver={onKeyPlayDown}
                         >
                             {n}
-                        </KeyButton>
+                        </Comp>
                     );
                 })}
             </KeyContainer>
