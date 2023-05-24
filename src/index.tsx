@@ -86,54 +86,67 @@ const App: FC = () => {
             >
                 <KeyButton
                     onMouseDown={onKeyPlayDown}
+                    onMouseOver={onKeyPlayDown}
                     value={261.63}
                 >C</KeyButton>
                 <BlackKeyButton
                     onMouseDown={onKeyPlayDown}
+                    onMouseOver={onKeyPlayDown}
                     value={277.18}
                 >C#</BlackKeyButton>
                 <KeyButton
                     onMouseDown={onKeyPlayDown}
+                    onMouseOver={onKeyPlayDown}
                     value={293.66}
                 >D</KeyButton>
                 <BlackKeyButton
                     onMouseDown={onKeyPlayDown}
+                    onMouseOver={onKeyPlayDown}
                     value={311.13}
                 >D#</BlackKeyButton>
                 <KeyButton
                     onMouseDown={onKeyPlayDown}
+                    onMouseOver={onKeyPlayDown}
                     value={329.63}
                 >E</KeyButton>
                 <KeyButton
                     onMouseDown={onKeyPlayDown}
+                    onMouseOver={onKeyPlayDown}
                     value={349.23}
                 >F</KeyButton>
                 <BlackKeyButton
                     onMouseDown={onKeyPlayDown}
+                    onMouseOver={onKeyPlayDown}
                     value={369.99}
                 >F#</BlackKeyButton>
                 <KeyButton
                     onMouseDown={onKeyPlayDown}
+                    onMouseOver={onKeyPlayDown}
                     value={392.00}
                 >G</KeyButton>
                 <BlackKeyButton
                     onMouseDown={onKeyPlayDown}
+                    onMouseOver={onKeyPlayDown}
                     value={392.00}
                 >G#</BlackKeyButton>
                 <KeyButton
                     onMouseDown={onKeyPlayDown}
+                    onMouseOver={onKeyPlayDown}
                     value={440.00}
                 >A</KeyButton>
                 <BlackKeyButton
                     onMouseDown={onKeyPlayDown}
+                    onMouseOver={onKeyPlayDown}
                     value={466.16}
                 >A#</BlackKeyButton>
                 <KeyButton
                     onMouseDown={onKeyPlayDown}
+                    onMouseOver={onKeyPlayDown}
                     value={493.88}
                 >B</KeyButton>
                 <KeyButton
                     onMouseDown={onKeyPlayDown}
+                    onMouseOver={onKeyPlayDown}
                     value={523.25}
                 >C</KeyButton>
             </KeyContainer>
