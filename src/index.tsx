@@ -44,7 +44,7 @@ const BlackKeyButton = styled(KeyButton)`
 const KeyContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: flex-start;
   padding: 1em;
   background-color: #ddd;
@@ -54,12 +54,13 @@ const KeyContainer = styled.div`
 const OscUIContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   background-color: #ddd;
   padding: 1em;
+  gap: 0.5em;
 `;
-const OscTypeButton = styled.button`
+const OscTypeButton = styled.div`
   padding: 0.5em;
   background-color: white;
 `;
