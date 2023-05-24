@@ -97,6 +97,18 @@ const App: FC = () => {
     const onKeyContainerDown = useCallback((e: MouseEvent<HTMLDivElement>) => setMouseIsDown(true), [setMouseIsDown]);
     const onKeyContainerUp = useCallback((e: MouseEvent<HTMLDivElement>) => setMouseIsDown(false), [setMouseIsDown]);
     const onKeyPlayDown = useCallback((e: MouseEvent<HTMLButtonElement> | KeyboardEvent) => {
+        if (e.type === 'keydown') {
+            const char = (e as KeyboardEvent).key;
+
+            if (char === '-' || char === '_') {
+                onDecrementOscType();
+                return;
+            } else if (char === '=' || char === '+') {
+                onIncrementOscType();
+                return;
+            }
+        }
+
         if (e.type === 'mousedown' || e.type === 'keydown' || mouseIsDown) {
             const value = e.type === 'keydown' ? getHalfStepFrequency(charList.indexOf((e as KeyboardEvent).key) + rangeStart) : parseFloat(`${(e as MouseEvent<HTMLButtonElement>).currentTarget.value}`);
 
@@ -143,7 +155,7 @@ const App: FC = () => {
                 kE.currentTarget?.addEventListener('keyup', onEnd as any);
             }
         }
-    }, [selectedOscType, mouseIsDown, keyPressedMap, setKeyPressed]);
+    }, [selectedOscType, mouseIsDown, keyPressedMap, setKeyPressed, onDecrementOscType, onIncrementOscType]);
 
     return (
         <>
