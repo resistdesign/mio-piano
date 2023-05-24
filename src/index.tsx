@@ -97,7 +97,7 @@ const App: FC = () => {
     }, [keyPressedMapTick, setKeyPressedMapTick]);
     const onKeyContainerDown = useCallback((e: MouseEvent<HTMLDivElement>) => setMouseIsDown(true), [setMouseIsDown]);
     const onKeyContainerUp = useCallback((e: MouseEvent<HTMLDivElement>) => setMouseIsDown(false), [setMouseIsDown]);
-    const onKeyPlayDown = useCallback((e: MouseEvent<HTMLButtonElement> | KeyboardEvent) => {
+    const onKeyPlayDown = useCallback((e: TouchEvent | MouseEvent<HTMLButtonElement> | KeyboardEvent) => {
         if (e.type === 'keydown') {
             const char = (e as KeyboardEvent).key;
 
@@ -110,7 +110,7 @@ const App: FC = () => {
             }
         }
 
-        if (e.type === 'mousedown' || e.type === 'keydown' || mouseIsDown) {
+        if (e.type === 'mousedown' || e.type === 'touchstart' || e.type === 'keydown' || mouseIsDown) {
             const value = e.type === 'keydown' ? getHalfStepFrequency(charList.indexOf((e as KeyboardEvent).key) + rangeStart) : parseFloat(`${(e as MouseEvent<HTMLButtonElement>).currentTarget.value}`);
 
             if (keyPressedMap[value]) {
@@ -122,7 +122,7 @@ const App: FC = () => {
             const oscillator = audioCtx.createOscillator();
             const vol = audioCtx.createGain();
             const delay = 0.25;
-            const onEnd = (endEvent: MouseEvent<HTMLButtonElement> | KeyboardEvent) => {
+            const onEnd = (endEvent: TouchEvent | MouseEvent<HTMLButtonElement> | KeyboardEvent) => {
                 const endValue = endEvent.type === 'keyup' ? getHalfStepFrequency(charList.indexOf((endEvent as KeyboardEvent).key) + rangeStart) : value;
 
                 if (endValue === value) {
@@ -150,6 +150,7 @@ const App: FC = () => {
 
                 mE.currentTarget.addEventListener('mouseup', onEnd as any);
                 mE.currentTarget.addEventListener('mouseout', onEnd as any);
+                mE.currentTarget.addEventListener('touchend', onEnd as any);
             } else {
                 const kE = e as KeyboardEvent;
 
@@ -187,6 +188,7 @@ const App: FC = () => {
                             value={f}
                             onMouseDown={onKeyPlayDown}
                             onMouseOver={onKeyPlayDown}
+                            onTouchStart={onKeyPlayDown as any}
                             style={{
                                 backgroundColor: keyPressedMap[f] ? 'lightblue' : undefined,
                             }}
