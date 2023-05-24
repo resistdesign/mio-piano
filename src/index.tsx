@@ -50,12 +50,12 @@ const KeyContainer = styled.div`
   padding: 1em;
   background-color: #ddd;
   user-select: none;
-  font-size: 2em;
+  font-size: 1em;
 `;
 
 const App: FC = () => {
-    const rangeStart = -20;
-    const rangeEnd = 20;
+    const rangeStart = -39;
+    const rangeEnd = 48;
     const rangeList = Array.from({length: rangeEnd - rangeStart + 1}, (_, i) => i + rangeStart);
     const [waveType, setWaveType] = useState('triangle');
     const [mouseIsDown, setMouseIsDown] = useState(false);
