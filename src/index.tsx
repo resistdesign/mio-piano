@@ -44,6 +44,7 @@ const KeyContainer = styled.div`
   align-items: flex-start;
   padding: 1em;
   background-color: #ddd;
+  user-select: none;
 `;
 
 const App: FC = () => {
@@ -82,7 +83,7 @@ const App: FC = () => {
             <KeyContainer
                 onMouseDown={onKeyContainerDown}
                 onMouseUp={onKeyContainerUp}
-                onMouseOut={onKeyContainerUp}
+                onMouseLeave={onKeyContainerUp}
             >
                 <KeyButton
                     onMouseDown={onKeyPlayDown}
