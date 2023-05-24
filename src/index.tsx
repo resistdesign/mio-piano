@@ -51,7 +51,7 @@ const App: FC = () => {
     const onInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setWaveType(e.currentTarget.value);
     }, [setWaveType]);
-    const onKeyPlay = useCallback((e: MouseEvent<HTMLButtonElement>) => {
+    const onKeyPlayDown = useCallback((e: MouseEvent<HTMLButtonElement>) => {
         const value = parseFloat(`${e.currentTarget.value}`);
         const oscillator = audioCtx.createOscillator();
 
@@ -60,10 +60,10 @@ const App: FC = () => {
         oscillator.frequency.value = value;
         oscillator.start();
 
-        setTimeout(() => {
+        e.currentTarget.addEventListener('mouseup', () => {
             oscillator.stop();
             oscillator.disconnect();
-        }, 500);
+        });
     }, [waveType]);
 
     return (
@@ -74,55 +74,55 @@ const App: FC = () => {
             </div>
             <KeyContainer>
                 <KeyButton
-                    onClick={onKeyPlay}
+                    onMouseDown={onKeyPlayDown}
                     value={261.63}
                 >C</KeyButton>
                 <BlackKeyButton
-                    onClick={onKeyPlay}
+                    onMouseDown={onKeyPlayDown}
                     value={277.18}
                 >C#</BlackKeyButton>
                 <KeyButton
-                    onClick={onKeyPlay}
+                    onMouseDown={onKeyPlayDown}
                     value={293.66}
                 >D</KeyButton>
                 <BlackKeyButton
-                    onClick={onKeyPlay}
+                    onMouseDown={onKeyPlayDown}
                     value={311.13}
                 >D#</BlackKeyButton>
                 <KeyButton
-                    onClick={onKeyPlay}
+                    onMouseDown={onKeyPlayDown}
                     value={329.63}
                 >E</KeyButton>
                 <KeyButton
-                    onClick={onKeyPlay}
+                    onMouseDown={onKeyPlayDown}
                     value={349.23}
                 >F</KeyButton>
                 <BlackKeyButton
-                    onClick={onKeyPlay}
+                    onMouseDown={onKeyPlayDown}
                     value={369.99}
                 >F#</BlackKeyButton>
                 <KeyButton
-                    onClick={onKeyPlay}
+                    onMouseDown={onKeyPlayDown}
                     value={392.00}
                 >G</KeyButton>
                 <BlackKeyButton
-                    onClick={onKeyPlay}
+                    onMouseDown={onKeyPlayDown}
                     value={392.00}
                 >G#</BlackKeyButton>
                 <KeyButton
-                    onClick={onKeyPlay}
+                    onMouseDown={onKeyPlayDown}
                     value={440.00}
                 >A</KeyButton>
                 <BlackKeyButton
-                    onClick={onKeyPlay}
+                    onMouseDown={onKeyPlayDown}
                     value={466.16}
                 >A#</BlackKeyButton>
                 <KeyButton
-                    onClick={onKeyPlay}
+                    onMouseDown={onKeyPlayDown}
                     value={493.88}
                 >B</KeyButton>
                 <KeyButton
-                    onClick={onKeyPlay}
+                    onMouseDown={onKeyPlayDown}
                     value={523.25}
                 >C</KeyButton>
             </KeyContainer>
