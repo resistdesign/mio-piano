@@ -47,12 +47,12 @@ const KeyContainer = styled.div`
 `;
 
 const App: FC = () => {
-    const [waveType, setWaveType] = useState('sine');
+    const [waveType, setWaveType] = useState('triangle');
     const onInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setWaveType(e.currentTarget.value);
     }, [setWaveType]);
     const onKeyPlay = useCallback((e: MouseEvent<HTMLButtonElement>) => {
-        const value = parseInt(`${e.currentTarget.value}`, 10);
+        const value = parseFloat(`${e.currentTarget.value}`);
         const oscillator = audioCtx.createOscillator();
 
         oscillator.type = waveType as any;
@@ -75,51 +75,55 @@ const App: FC = () => {
             <KeyContainer>
                 <KeyButton
                     onClick={onKeyPlay}
-                    value={16.35}
+                    value={261.63}
                 >C</KeyButton>
                 <BlackKeyButton
                     onClick={onKeyPlay}
-                    value={3100}
+                    value={277.18}
                 >C#</BlackKeyButton>
                 <KeyButton
                     onClick={onKeyPlay}
-                    value={3200}
+                    value={293.66}
                 >D</KeyButton>
                 <BlackKeyButton
                     onClick={onKeyPlay}
-                    value={3300}
+                    value={311.13}
                 >D#</BlackKeyButton>
                 <KeyButton
                     onClick={onKeyPlay}
-                    value={3400}
+                    value={329.63}
                 >E</KeyButton>
                 <KeyButton
                     onClick={onKeyPlay}
-                    value={3500}
+                    value={349.23}
                 >F</KeyButton>
                 <BlackKeyButton
                     onClick={onKeyPlay}
-                    value={3600}
+                    value={369.99}
                 >F#</BlackKeyButton>
                 <KeyButton
                     onClick={onKeyPlay}
-                    value={3700}
+                    value={392.00}
+                >G</KeyButton>
+                <BlackKeyButton
+                    onClick={onKeyPlay}
+                    value={392.00}
+                >G#</BlackKeyButton>
+                <KeyButton
+                    onClick={onKeyPlay}
+                    value={440.00}
                 >A</KeyButton>
                 <BlackKeyButton
                     onClick={onKeyPlay}
-                    value={3800}
+                    value={466.16}
                 >A#</BlackKeyButton>
                 <KeyButton
                     onClick={onKeyPlay}
-                    value={3900}
+                    value={493.88}
                 >B</KeyButton>
-                <BlackKeyButton
-                    onClick={onKeyPlay}
-                    value={4000}
-                >B#</BlackKeyButton>
                 <KeyButton
                     onClick={onKeyPlay}
-                    value={4100}
+                    value={523.25}
                 >C</KeyButton>
             </KeyContainer>
         </>
