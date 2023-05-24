@@ -57,7 +57,7 @@ const App: FC = () => {
     const rangeStart = -39;
     const rangeEnd = 48;
     const rangeList = Array.from({length: rangeEnd - rangeStart + 1}, (_, i) => i + rangeStart);
-    const [waveType, setWaveType] = useState('triangle');
+    const [waveType, setWaveType] = useState('sine');
     const [mouseIsDown, setMouseIsDown] = useState(false);
     const onInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setWaveType(e.currentTarget.value);
@@ -68,14 +68,24 @@ const App: FC = () => {
         if (e.type === 'mousedown' || mouseIsDown) {
             const value = parseFloat(`${e.currentTarget.value}`);
             const oscillator = audioCtx.createOscillator();
+            const vol = audioCtx.createGain();
+            const delay = 0.25;
             const onEnd = () => {
-                oscillator.stop();
-                oscillator.disconnect();
+                oscillator.stop(audioCtx.currentTime + delay);
+                vol.gain.setValueAtTime(vol.gain.value, audioCtx.currentTime);
+                vol.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + (delay - 0.01));
+
+                setTimeout(() => {
+                    oscillator.disconnect();
+                    vol.disconnect();
+                }, 1000 * delay);
             };
 
             oscillator.type = waveType as any;
-            oscillator.connect(audioCtx.destination);
+            vol.connect(audioCtx.destination);
+            oscillator.connect(vol);
             oscillator.frequency.value = value;
+            vol.gain.setValueAtTime(1, audioCtx.currentTime);
             oscillator.start();
 
             e.currentTarget.addEventListener('mouseup', onEnd);
@@ -107,9 +117,7 @@ const App: FC = () => {
                             value={f}
                             onMouseDown={onKeyPlayDown}
                             onMouseOver={onKeyPlayDown}
-                        >
-                            {n}
-                        </Comp>
+                        />
                     );
                 })}
             </KeyContainer>
