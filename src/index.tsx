@@ -49,7 +49,7 @@ const KeyContainer = styled.div`
   padding: 1em;
   background-color: #d20707;
   user-select: none;
-  font-size: 1em;
+  font-size: 1.125em;
 `;
 const OscUIContainer = styled.div`
   display: flex;
@@ -59,6 +59,7 @@ const OscUIContainer = styled.div`
   background-color: #ddd;
   padding: 1em;
   gap: 0.5em;
+  font-size: 1.125em;
 `;
 const OscTypeButton = styled.div`
   padding: 0.5em;
