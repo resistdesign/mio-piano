@@ -48,23 +48,30 @@ const KeyContainer = styled.div`
 
 const App: FC = () => {
     const [waveType, setWaveType] = useState('triangle');
+    const [mouseIsDown, setMouseIsDown] = useState(false);
     const onInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setWaveType(e.currentTarget.value);
     }, [setWaveType]);
+    const onKeyContainerDown = useCallback((e: MouseEvent<HTMLDivElement>) => setMouseIsDown(true), [setMouseIsDown]);
+    const onKeyContainerUp = useCallback((e: MouseEvent<HTMLDivElement>) => setMouseIsDown(false), [setMouseIsDown]);
     const onKeyPlayDown = useCallback((e: MouseEvent<HTMLButtonElement>) => {
-        const value = parseFloat(`${e.currentTarget.value}`);
-        const oscillator = audioCtx.createOscillator();
+        if (mouseIsDown) {
+            const value = parseFloat(`${e.currentTarget.value}`);
+            const oscillator = audioCtx.createOscillator();
+            const onEnd = () => {
+                oscillator.stop();
+                oscillator.disconnect();
+            };
 
-        oscillator.type = waveType as any;
-        oscillator.connect(audioCtx.destination);
-        oscillator.frequency.value = value;
-        oscillator.start();
+            oscillator.type = waveType as any;
+            oscillator.connect(audioCtx.destination);
+            oscillator.frequency.value = value;
+            oscillator.start();
 
-        e.currentTarget.addEventListener('mouseup', () => {
-            oscillator.stop();
-            oscillator.disconnect();
-        });
-    }, [waveType]);
+            e.currentTarget.addEventListener('mouseup', onEnd);
+            e.currentTarget.addEventListener('mouseout', onEnd);
+        }
+    }, [waveType, mouseIsDown]);
 
     return (
         <>
@@ -72,7 +79,11 @@ const App: FC = () => {
             <div>
                 <input type="text" value={waveType} onChange={onInput}/>
             </div>
-            <KeyContainer>
+            <KeyContainer
+                onMouseDown={onKeyContainerDown}
+                onMouseUp={onKeyContainerUp}
+                onMouseOut={onKeyContainerUp}
+            >
                 <KeyButton
                     onMouseDown={onKeyPlayDown}
                     value={261.63}
