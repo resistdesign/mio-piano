@@ -2,6 +2,8 @@ import {render} from 'react-dom';
 import React, {ChangeEvent, FC, MouseEvent, useCallback, useState} from 'react';
 import styled, {createGlobalStyle} from "styled-components";
 
+const charList = "1234567890qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^&*()QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?";
+
 const getHalfStepFrequency = (n = 0) => 440 * Math.pow(Math.pow(2, 1 / 12), n);
 
 // create web audio api context
@@ -59,14 +61,24 @@ const App: FC = () => {
     const rangeList = Array.from({length: rangeEnd - rangeStart + 1}, (_, i) => i + rangeStart);
     const [waveType, setWaveType] = useState('sine');
     const [mouseIsDown, setMouseIsDown] = useState(false);
+    const [keyPressedMap, setKeyPressedMap] = useState<Record<number, boolean>>({});
     const onInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setWaveType(e.currentTarget.value);
     }, [setWaveType]);
     const onKeyContainerDown = useCallback((e: MouseEvent<HTMLDivElement>) => setMouseIsDown(true), [setMouseIsDown]);
     const onKeyContainerUp = useCallback((e: MouseEvent<HTMLDivElement>) => setMouseIsDown(false), [setMouseIsDown]);
-    const onKeyPlayDown = useCallback((e: MouseEvent<HTMLButtonElement>) => {
-        if (e.type === 'mousedown' || mouseIsDown) {
-            const value = parseFloat(`${e.currentTarget.value}`);
+    const onKeyPlayDown = useCallback((e: MouseEvent<HTMLButtonElement> | KeyboardEvent) => {
+        if (e.type === 'mousedown' || e.type === 'keydown' || mouseIsDown) {
+            const value = e.type === 'keydown' ? getHalfStepFrequency(charList.indexOf((e as KeyboardEvent).key) + rangeStart) : parseFloat(`${(e as MouseEvent<HTMLButtonElement>).currentTarget.value}`);
+
+            if (keyPressedMap[value]) {
+                return;
+            }
+
+            setKeyPressedMap({
+                ...keyPressedMap,
+                [value]: true,
+            });
             const oscillator = audioCtx.createOscillator();
             const vol = audioCtx.createGain();
             const delay = 0.25;
@@ -78,6 +90,10 @@ const App: FC = () => {
                 setTimeout(() => {
                     oscillator.disconnect();
                     vol.disconnect();
+                    setKeyPressedMap({
+                        ...keyPressedMap,
+                        [value]: false,
+                    });
                 }, 1000 * delay);
             };
 
@@ -88,10 +104,18 @@ const App: FC = () => {
             vol.gain.setValueAtTime(1, audioCtx.currentTime);
             oscillator.start();
 
-            e.currentTarget.addEventListener('mouseup', onEnd);
-            e.currentTarget.addEventListener('mouseout', onEnd);
+            if (e.type !== 'keydown') {
+                const mE = e as MouseEvent<HTMLButtonElement>;
+
+                mE.currentTarget.addEventListener('mouseup', onEnd);
+                mE.currentTarget.addEventListener('mouseout', onEnd);
+            } else {
+                const kE = e as KeyboardEvent;
+
+                kE.currentTarget?.addEventListener('keyup', onEnd);
+            }
         }
-    }, [waveType, mouseIsDown]);
+    }, [waveType, mouseIsDown, keyPressedMap, setKeyPressedMap]);
 
     return (
         <>
@@ -103,6 +127,8 @@ const App: FC = () => {
                 onMouseDown={onKeyContainerDown}
                 onMouseUp={onKeyContainerUp}
                 onMouseLeave={onKeyContainerUp}
+                onKeyDown={onKeyPlayDown as any}
+                tabIndex={0}
             >
                 {rangeList.map((n) => {
                     const f = getHalfStepFrequency(n);
@@ -117,6 +143,9 @@ const App: FC = () => {
                             value={f}
                             onMouseDown={onKeyPlayDown}
                             onMouseOver={onKeyPlayDown}
+                            style={{
+                                backgroundColor: keyPressedMap[f] ? 'lightblue' : undefined,
+                            }}
                         />
                     );
                 })}
