@@ -1,7 +1,8 @@
 import {render} from 'react-dom';
-import React, {ChangeEvent, FC, MouseEvent, useCallback, useRef, useState} from 'react';
+import React, {FC, MouseEvent, useCallback, useRef, useState} from 'react';
 import styled, {createGlobalStyle} from "styled-components";
 
+const oscTypes: OscillatorType[] = ['sine', 'square', 'sawtooth', 'triangle'];
 const charList = "1234567890qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^&*()QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?";
 
 const getHalfStepFrequency = (n = 0) => 440 * Math.pow(Math.pow(2, 1 / 12), n);
@@ -17,10 +18,6 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     font-family: sans-serif;
   }
-`;
-const MessageBox = styled.div`
-  background-color: #eee;
-  font-size: 5em;
 `;
 const KeyButton = styled.button`
   background-color: white;
@@ -54,12 +51,32 @@ const KeyContainer = styled.div`
   user-select: none;
   font-size: 1em;
 `;
-
+const OscUIContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #ddd;
+  padding: 1em;
+`;
+const OscTypeButton = styled.button`
+  padding: 0.5em;
+  background-color: white;
+`;
 const App: FC = () => {
+    const [selectedOscType, setSelectedOscType] = useState<OscillatorType>(oscTypes[0]);
+    const onIncrementOscType = useCallback(() => {
+        const i = oscTypes.indexOf(selectedOscType);
+        setSelectedOscType(oscTypes[i + 1] || oscTypes[0]);
+    }, [selectedOscType, setSelectedOscType]);
+    const onDecrementOscType = useCallback(() => {
+        const i = oscTypes.indexOf(selectedOscType);
+        setSelectedOscType(oscTypes[i - 1] || oscTypes[oscTypes.length - 1]);
+    }, [selectedOscType, setSelectedOscType]);
     const rangeStart = -39;
     const rangeEnd = 48;
     const rangeList = Array.from({length: rangeEnd - rangeStart + 1}, (_, i) => i + rangeStart);
-    const [waveType, setWaveType] = useState('sine');
+    const [waveType, setWaveType] = useState<OscillatorType>('sine');
     const [mouseIsDown, setMouseIsDown] = useState(false);
     const keyPressedMapRef = useRef<Record<number, boolean>>({});
     const keyPressedMap = keyPressedMapRef.current;
@@ -71,9 +88,6 @@ const App: FC = () => {
         };
         setKeyPressedMapTick(keyPressedMapTick + 1);
     }, [keyPressedMapTick, setKeyPressedMapTick]);
-    const onInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        setWaveType(e.currentTarget.value);
-    }, [setWaveType]);
     const onKeyContainerDown = useCallback((e: MouseEvent<HTMLDivElement>) => setMouseIsDown(true), [setMouseIsDown]);
     const onKeyContainerUp = useCallback((e: MouseEvent<HTMLDivElement>) => setMouseIsDown(false), [setMouseIsDown]);
     const onKeyPlayDown = useCallback((e: MouseEvent<HTMLButtonElement> | KeyboardEvent) => {
@@ -105,7 +119,7 @@ const App: FC = () => {
                 }
             };
 
-            oscillator.type = waveType as any;
+            oscillator.type = waveType;
             vol.connect(audioCtx.destination);
             oscillator.connect(vol);
             oscillator.frequency.value = value;
@@ -128,15 +142,18 @@ const App: FC = () => {
     return (
         <>
             <GlobalStyle/>
-            <div>
-                <input type="text" value={waveType} onChange={onInput}/>
-            </div>
+            <OscUIContainer>
+                <OscTypeButton onClick={onDecrementOscType}>-</OscTypeButton>
+                <OscTypeButton>{selectedOscType}</OscTypeButton>
+                <OscTypeButton onClick={onIncrementOscType}>+</OscTypeButton>
+            </OscUIContainer>
             <KeyContainer
                 onMouseDown={onKeyContainerDown}
                 onMouseUp={onKeyContainerUp}
                 onMouseLeave={onKeyContainerUp}
                 onKeyDown={onKeyPlayDown as any}
                 tabIndex={0}
+                autoFocus
             >
                 {rangeList.map((n) => {
                     const f = getHalfStepFrequency(n);
