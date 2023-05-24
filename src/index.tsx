@@ -47,7 +47,7 @@ const KeyContainer = styled.div`
   justify-content: center;
   align-items: flex-start;
   padding: 1em;
-  background-color: #ddd;
+  background-color: #d20707;
   user-select: none;
   font-size: 1em;
 `;
