@@ -57,8 +57,8 @@ const App: FC = () => {
 
         oscillator.type = waveType as any;
         oscillator.connect(audioCtx.destination);
+        oscillator.frequency.value = value;
         oscillator.start();
-        oscillator.frequency.setValueAtTime(value / 5, audioCtx.currentTime);
 
         setTimeout(() => {
             oscillator.stop();
@@ -75,7 +75,7 @@ const App: FC = () => {
             <KeyContainer>
                 <KeyButton
                     onClick={onKeyPlay}
-                    value={3000}
+                    value={16.35}
                 >C</KeyButton>
                 <BlackKeyButton
                     onClick={onKeyPlay}
