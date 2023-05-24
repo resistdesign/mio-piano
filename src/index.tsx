@@ -1,5 +1,5 @@
 import {render} from 'react-dom';
-import React, {ChangeEvent, FC, MouseEvent, useCallback, useState} from 'react';
+import React, {ChangeEvent, FC, MouseEvent, useCallback, useRef, useState} from 'react';
 import styled, {createGlobalStyle} from "styled-components";
 
 const charList = "1234567890qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^&*()QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?";
@@ -61,7 +61,16 @@ const App: FC = () => {
     const rangeList = Array.from({length: rangeEnd - rangeStart + 1}, (_, i) => i + rangeStart);
     const [waveType, setWaveType] = useState('sine');
     const [mouseIsDown, setMouseIsDown] = useState(false);
-    const [keyPressedMap, setKeyPressedMap] = useState<Record<number, boolean>>({});
+    const keyPressedMapRef = useRef<Record<number, boolean>>({});
+    const keyPressedMap = keyPressedMapRef.current;
+    const [keyPressedMapTick, setKeyPressedMapTick] = useState<number>(0);
+    const setKeyPressed = useCallback((key: number, value: boolean) => {
+        keyPressedMapRef.current = {
+            ...keyPressedMapRef.current,
+            [key]: value,
+        };
+        setKeyPressedMapTick(keyPressedMapTick + 1);
+    }, [keyPressedMapTick, setKeyPressedMapTick]);
     const onInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setWaveType(e.currentTarget.value);
     }, [setWaveType]);
@@ -75,10 +84,8 @@ const App: FC = () => {
                 return;
             }
 
-            setKeyPressedMap({
-                ...keyPressedMap,
-                [value]: true,
-            });
+            setKeyPressed(value, true);
+
             const oscillator = audioCtx.createOscillator();
             const vol = audioCtx.createGain();
             const delay = 0.25;
@@ -90,10 +97,7 @@ const App: FC = () => {
                 setTimeout(() => {
                     oscillator.disconnect();
                     vol.disconnect();
-                    setKeyPressedMap({
-                        ...keyPressedMap,
-                        [value]: false,
-                    });
+                    setKeyPressed(value, false);
                 }, 1000 * delay);
             };
 
@@ -115,7 +119,7 @@ const App: FC = () => {
                 kE.currentTarget?.addEventListener('keyup', onEnd);
             }
         }
-    }, [waveType, mouseIsDown, keyPressedMap, setKeyPressedMap]);
+    }, [waveType, mouseIsDown, keyPressedMap, setKeyPressed]);
 
     return (
         <>
