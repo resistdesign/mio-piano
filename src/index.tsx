@@ -89,16 +89,20 @@ const App: FC = () => {
             const oscillator = audioCtx.createOscillator();
             const vol = audioCtx.createGain();
             const delay = 0.25;
-            const onEnd = () => {
-                oscillator.stop(audioCtx.currentTime + delay);
-                vol.gain.setValueAtTime(vol.gain.value, audioCtx.currentTime);
-                vol.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + (delay - 0.01));
+            const onEnd = (endEvent: MouseEvent<HTMLButtonElement> | KeyboardEvent) => {
+                const endValue = endEvent.type === 'keyup' ? getHalfStepFrequency(charList.indexOf((endEvent as KeyboardEvent).key) + rangeStart) : value;
 
-                setTimeout(() => {
-                    oscillator.disconnect();
-                    vol.disconnect();
-                    setKeyPressed(value, false);
-                }, 1000 * delay);
+                if (endValue === value) {
+                    oscillator.stop(audioCtx.currentTime + delay);
+                    vol.gain.setValueAtTime(vol.gain.value, audioCtx.currentTime);
+                    vol.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + (delay - 0.01));
+
+                    setTimeout(() => {
+                        oscillator.disconnect();
+                        vol.disconnect();
+                        setKeyPressed(value, false);
+                    }, 1000 * delay);
+                }
             };
 
             oscillator.type = waveType as any;
@@ -111,12 +115,12 @@ const App: FC = () => {
             if (e.type !== 'keydown') {
                 const mE = e as MouseEvent<HTMLButtonElement>;
 
-                mE.currentTarget.addEventListener('mouseup', onEnd);
-                mE.currentTarget.addEventListener('mouseout', onEnd);
+                mE.currentTarget.addEventListener('mouseup', onEnd as any);
+                mE.currentTarget.addEventListener('mouseout', onEnd as any);
             } else {
                 const kE = e as KeyboardEvent;
 
-                kE.currentTarget?.addEventListener('keyup', onEnd);
+                kE.currentTarget?.addEventListener('keyup', onEnd as any);
             }
         }
     }, [waveType, mouseIsDown, keyPressedMap, setKeyPressed]);
